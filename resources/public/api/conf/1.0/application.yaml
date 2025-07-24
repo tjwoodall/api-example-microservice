@@ -68,7 +68,7 @@ components:
         ]
       required: true
   securitySchemes:
-    userRestricted:
+    User-Restricted:
       type: oauth2
       description: |
         HMRC supports OAuth 2.0 for authenticating user restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
@@ -80,7 +80,7 @@ components:
           refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
           scopes:
             hello: access hello user
-    applicationRestricted:
+    Application-Restricted:
       type: oauth2
       description: |
         HMRC supports OAuth 2.0 for authenticating application restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
@@ -106,10 +106,15 @@ paths:
           description: "OK Response"
           content:
             application/json:
-              example: 
-                {
-                  "message" : "Hello World"
-                }
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+                example: 
+                  {
+                    "message" : "Hello World"
+                  }
       security:
       - {}
                 
@@ -129,21 +134,33 @@ paths:
           description: "OK Response"
           content:
             application/json:
-              example: 
-                {
-                  "message" : "Hello User"
-                }
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+                example: 
+                  {
+                    "message" : "Hello User"
+                  }
         401:
           description: "UNAUTHORISED Response"
           content:
             application/json:
-              example: 
-                {
-                  "code": "MISSING_CREDENTIALS",
-                  "message": "Authentication information is not provided"
-                }
+              schema:
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                type: object
+                example: 
+                  {
+                    "code": "MISSING_CREDENTIALS",
+                    "message": "Authentication information is not provided"
+                  }
       security:
-      - userRestricted:
+      - User-Restricted:
         - hello
         
   /hello/application:
@@ -163,18 +180,30 @@ paths:
           description: "OK Response"
           content:
             application/json:
-              example: 
-                {
-                  "message" : "Hello Application"
-                }
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+                example: 
+                  {
+                    "message" : "Hello Application"
+                  }
         401:
           description: "UNAUTHORISED Response"
           content:
             application/json:
-              example: 
-                {
-                  "code": "MISSING_CREDENTIALS",
-                  "message": "Authentication information is not provided"
-                }
+              schema:
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                type: object
+                example: 
+                  {
+                    "code": "MISSING_CREDENTIALS",
+                    "message": "Authentication information is not provided"
+                  }
       security:
-      - applicationRestricted: []
+      - Application-Restricted: []
