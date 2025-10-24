@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Hello World
+  description: "# Overview\nThis is an example API that allows software developers\
+    \ to test that their applications can connect with the HMRC API Platform. It also\
+    \ acts as a hands-on tutorial for developers to get started with HMRC APIs.\n\n\
+    It includes resources for testing access to the three different access levels:\n\
+    \n- Say hello world is an example of an unrestricted endpoint\n- Say hello user\
+    \ is an example of a user-restricted endpoint\n- Say hello application is an example\
+    \ of an application-restricted endpoint\n\nFurther details of the different access\
+    \ levels are given on \nthe [Authorisation](/api-documentation/docs/authorisation)\
+    \ page.\n\nFor more information about how to develop your own client applications,\
+    \ including example clients\nfor this API, see [Tutorials](/api-documentation/docs/tutorials).\n\
+    \n# Versioning\nWhen an API changes in a way that is backwards-incompatible, we\
+    \ increase the version number of the API. \nSee our [reference guide](/api-documentation/docs/reference-guide#versioning)\
+    \ for more on versioning.\n\n# Errors\nWe use standard HTTP status codes to show\
+    \ whether an API request succeeded or not. They are usually in the range:\n\n\
+    - 200 to 299 if it succeeded, including code 202 if it was accepted by an API\
+    \ that needs to wait for further action\n- 400 to 499 if it failed because of\
+    \ a client error by your application\n- 500 to 599 if it failed because of an\
+    \ error on our server\n\nErrors specific to each API are shown in the Endpoints\
+    \ section, under Response. See our \n[reference guide](/api-documentation/docs/reference-guide#errors)\
+    \ for more on errors.\n"
+  version: "1.0"
+servers:
+- url: https://test-api.service.hmrc.gov.uk
+  description: Sandbox
+- url: https://api.service.hmrc.gov.uk/
+  description: Production
+paths:
+  /hello/world:
+    get:
+      tags:
+      - api-example-microservice
+      summary: Say hello world
+      description: |
+        A simple example for integrating with an unrestricted service.
+
+        Any request to this endpoint initiates a 'Hello World' response.
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - application/vnd.hmrc.1.0+json
+          - application/vnd.hmrc.1.0+xml
+      responses:
+        "200":
+          description: OK Response
+          content:
+            application/json:
+              example:
+                message: Hello World
+      security:
+      - {}
+  /hello/user:
+    get:
+      tags:
+      - api-example-microservice
+      summary: Say hello user
+      description: |
+        A simple example for integrating with a user-restricted service, using an OAuth 2.0 `access_token`.
+
+        Any authorised request to this endpoint initiates a 'Hello User' response.
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - application/vnd.hmrc.1.0+json
+          - application/vnd.hmrc.1.0+xml
+      responses:
+        "200":
+          description: OK Response
+          content:
+            application/json:
+              example:
+                message: Hello User
+        "401":
+          description: UNAUTHORISED Response
+          content:
+            application/json:
+              example:
+                code: MISSING_CREDENTIALS
+                message: Authentication information is not provided
+      security:
+      - userRestricted:
+        - hello
+  /hello/application:
+    get:
+      tags:
+      - api-example-microservice
+      summary: Say hello application
+      description: |
+        A simple example for integrating with an application-restricted service, using an OAuth 2.0 `access_token`.
+
+        Any authorised request to this endpoint initiates a 'Hello Application' response.
+      parameters:
+      - name: Accept
+        in: header
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - application/vnd.hmrc.1.0+json
+          - application/vnd.hmrc.1.0+xml
+      responses:
+        "200":
+          description: OK Response
+          content:
+            application/json:
+              example:
+                message: Hello Application
+        "401":
+          description: UNAUTHORISED Response
+          content:
+            application/json:
+              example:
+                code: MISSING_CREDENTIALS
+                message: Authentication information is not provided
+      security:
+      - applicationRestricted: []
+components:
+  responses:
+    badOrExpiredTokenResponse:
+      description: |
+        Bad or expired token.
+        This can happen if the user or HMRC revoked or expired an access token.
+        To fix, you should re-authenticate the user.
+      content:
+        application/json:
+          example: null
+    forbiddenResponse:
+      description: |
+        Bad OAuth request (wrong consumer key, bad nonce, expired
+        timestamp...). Unfortunately, re-authenticating the user won't help here.
+      content:
+        application/json:
+          example: null
+  parameters:
+    acceptHeader:
+      name: Accept
+      in: header
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        enum:
+        - application/vnd.hmrc.1.0+json
+        - application/vnd.hmrc.1.0+xml
+  securitySchemes:
+    userRestricted:
+      type: oauth2
+      description: |
+        HMRC supports OAuth 2.0 for authenticating user restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
+        See https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints for details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            hello: access hello user
+    applicationRestricted:
+      type: oauth2
+      description: |
+        HMRC supports OAuth 2.0 for authenticating application restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
+        See https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/application-restricted-endpoints for details.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          scopes: {}
