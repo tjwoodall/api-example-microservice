@@ -30,25 +30,35 @@ components:
         type: string
         example: 2021
       required: true
+    name:
+      name: Name
+      in: path
+      description: |
+        The name
+      schema:
+        type: string
+        example: Alice
+      required: true
 
 paths:
-  /hello/world:
-    get:
-      summary: Hello world
-      parameters:
-      - $ref: '#/components/parameters/acceptHeader'
-      responses:
-        201:
-          description: "No Content"
-      security:
-      - {}
-      
   /hello/{year}:
     get:
       summary: Hello world with a year
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
       - $ref: '#/components/parameters/year'
+      responses:
+        201:
+          description: "No Content"
+      security:
+      - {}
+  
+  /hello/{name}:
+    get:
+      summary: Hello world with a name
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - $ref: '#/components/parameters/name'
       responses:
         201:
           description: "No Content"
