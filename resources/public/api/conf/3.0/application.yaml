@@ -21,6 +21,13 @@ components:
         type: string
         enum: [ "application/vnd.hmrc.3.0+json" ]
       required: true
+    authorizationHeader:
+      name: Authorization
+      in: header
+      schema:
+        type: string
+        example: Bearer bb7fed3fe10dd235a2ccda3d50fb
+      required: true
     year:
       name: Year
       in: path
@@ -30,35 +37,27 @@ components:
         type: string
         example: 2021
       required: true
-    name:
-      name: Name
-      in: path
-      description: |
-        The name
-      schema:
-        type: string
-        example: Alice
-      required: true
 
 paths:
-  /hello/{year}:
+  /hello/world:
     get:
-      summary: Hello world with a year
+      summary: Hello world
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
-      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/authorizationHeader'
       responses:
         201:
           description: "No Content"
       security:
       - {}
-  
-  /hello/{name}:
+      
+  /hello/{year}:
     get:
-      summary: Hello world with a name
+      summary: Hello world with a year
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
-      - $ref: '#/components/parameters/name'
+      - $ref: '#/components/parameters/authorizationHeader'
+      - $ref: '#/components/parameters/year'
       responses:
         201:
           description: "No Content"
