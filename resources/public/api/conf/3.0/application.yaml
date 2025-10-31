@@ -21,6 +21,15 @@ components:
         type: string
         enum: [ "application/vnd.hmrc.3.0+json" ]
       required: true
+    year:
+      name: Year
+      in: path
+      description: |
+        The year
+      schema:
+        type: string
+        example: 2021
+      required: true
 
 paths:
   /hello/world:
@@ -28,6 +37,18 @@ paths:
       summary: Hello world
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
+      responses:
+        201:
+          description: "No Content"
+      security:
+      - {}
+      
+  /hello/{year}:
+    get:
+      summary: Hello world with a year
+      parameters:
+      - $ref: '#/components/parameters/acceptHeader'
+      - $ref: '#/components/parameters/year'
       responses:
         201:
           description: "No Content"
