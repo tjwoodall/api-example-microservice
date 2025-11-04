@@ -53,13 +53,12 @@ paths:
       security:
       - {}
       
-  /hello/{name}/{year}:
+  /hello/user/{name}:
     get:
       summary: Hello with a name and year
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
       - $ref: '#/components/parameters/name'
-      - $ref: '#/components/parameters/year'
       responses:
         201:
           description: "No Content"
