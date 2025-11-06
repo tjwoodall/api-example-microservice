@@ -41,24 +41,25 @@ components:
       required: true
 
 paths:
-  /hello/world/{year}:
+  /hello/world/{year}/{name}:
     get:
       summary: Hello world with a year
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
       - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/name'
       responses:
         201:
           description: "No Content"
       security:
       - {}
       
-  /hello/user/{name}:
+  /hello/world/peace/{year}:
     get:
       summary: Hello with a name and year
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
-      - $ref: '#/components/parameters/name'
+      - $ref: '#/components/parameters/year'
       responses:
         201:
           description: "No Content"
