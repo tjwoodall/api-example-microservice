@@ -7,9 +7,9 @@ info:
     # Overview
     Testing various endpoint combinations in the AWS API Gateway
 servers:
-- url: https://test-api.service.hmrc.gov.uk
+- url: https://test-api.service.hmrc.gov.uk/hello
   description: Sandbox
-- url: https://api.service.hmrc.gov.uk/
+- url: https://api.service.hmrc.gov.uk/hello
   description: Production
 
 components:
@@ -21,8 +21,8 @@ components:
         type: string
         enum: [ "application/vnd.hmrc.3.0+json" ]
       required: true
-    year:
-      name: Year
+    yearPath:
+      name: year
       in: path
       description: |
         The year
@@ -30,38 +30,28 @@ components:
         type: string
         example: 2021
       required: true
-    name:
-      name: Name
-      in: path
+    yearQuery:
+      name: year
+      in: query
       description: |
-        The name
+        The year
       schema:
         type: string
-        example: Alice
+        example: 2021
       required: true
 
 paths:
-  /hello/world/{year}:
+  /world/{year}:
     get:
-      summary: Hello world with a year
+      summary: Hello world with a year in path and query
       parameters:
       - $ref: '#/components/parameters/acceptHeader'
-      - $ref: '#/components/parameters/year'
+      - $ref: '#/components/parameters/yearPath'
+      - $ref: '#/components/parameters/yearQuery'
       responses:
         201:
           description: "No Content"
       security:
       - {}
-      
-  /hello/World/{name}:
-    get:
-      summary: Hello with a name
-      parameters:
-      - $ref: '#/components/parameters/acceptHeader'
-      - $ref: '#/components/parameters/name'
-      responses:
-        201:
-          description: "No Content"
-      security:
-      - {}
+
 
