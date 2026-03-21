@@ -69,7 +69,7 @@ components:
         ]
       required: true
   securitySchemes:
-    userRestricted:
+    User-Restricted:
       type: oauth2
       description: HMRC supports OAuth 2.0 for authenticating User-restricted API requests
       flows: 
@@ -79,7 +79,7 @@ components:
           refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
           scopes:
             hello: access hello user
-    applicationRestricted:
+    Application-Restricted:
       type: oauth2
       description: HMRC supports OAuth 2.0 for authenticating app-restricted API requests
       flows:
@@ -157,7 +157,7 @@ paths:
                     "message": "Authentication information is not provided"
                   }
       security:
-      - userRestricted:
+      - User-Restricted:
         - hello
         
   /hello/application:
@@ -203,4 +203,4 @@ paths:
                     "message": "Authentication information is not provided"
                   }
       security:
-      - applicationRestricted: []
+      - Application-Restricted: []
